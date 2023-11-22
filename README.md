@@ -17,7 +17,7 @@
 
 ### Задание 4
 
-![Название скриншота 1](https://github.com/SogonovAN/cache-hw/blob/main/3.JPG)`
+![Название скриншота 1](https://github.com/SogonovAN/cache-hw/blob/main/4.JPG)`
 
 ### Задание 5
 

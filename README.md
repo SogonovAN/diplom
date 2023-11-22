@@ -7,13 +7,21 @@
 1.2 Большая нагрузка на БД, использование кэша позволит снизить нагрузку кэшированием тяжелых запросов.
 
 ```
+### Задание 2
 
+![Название скриншота 1](https://github.com/SogonovAN/cache-hw/blob/main/2.JPG)`
 
-![Название скриншота 1](https://github.com/SogonovAN/balancer-cloud-hw/blob/main/11.JPG)`
+### Задание 3
 
-![Название скриншота 1](https://github.com/SogonovAN/balancer-cloud-hw/blob/main/22.JPG)`
+![Название скриншота 1](https://github.com/SogonovAN/cache-hw/blob/main/3.JPG)`
 
-![Название скриншота 1](https://github.com/SogonovAN/balancer-cloud-hw/blob/main/3.JPG)`
+### Задание 4
+
+![Название скриншота 1](https://github.com/SogonovAN/cache-hw/blob/main/3.JPG)`
+
+### Задание 5
+
+![Скриншот 5](https://github.com/SogonovAN/cache-hw/blob/main/5.JPG) 
 
 ---
 

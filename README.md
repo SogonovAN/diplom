@@ -14,7 +14,7 @@
 
 ### Задание 4
 
-![Название скриншота 1](https://github.com/SogonovAN/ELK-hw/blob/main/4.JPG)`
+![Название скриншота 4](https://github.com/SogonovAN/ELK-hw/blob/main/4.JPG)`
 
 ---
 

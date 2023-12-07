@@ -2,21 +2,30 @@
 
 ### Задание 1
 
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/11.JPG)`
 
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/1.JPG)`
 
-![Название скриншота 1](https://github.com/SogonovAN/ELK-hw/blob/main/1.JPG)`
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/11.1.JPG)`
+
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/1.1.JPG)`
+
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/11.2.JPG)`
+
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/11.3.JPG)`
+
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/11.4.JPG)`
+
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/11.5.JPG)`
+
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/11.6.JPG)`
+
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/1.2.JPG)`
 
 ### Задание 2
 
-![Название скриншота 1](https://github.com/SogonovAN/ELK-hw/blob/main/2.JPG)`
+![Название скриншота 1](![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/2.JPG)`
 
-### Задание 3
-
-![Название скриншота 1](https://github.com/SogonovAN/ELK-hw/blob/main/3.1.JPG)`
-
-### Задание 4
-
-![Название скриншота 4](https://github.com/SogonovAN/ELK-hw/blob/main/4.JPG)`
 
 ---
 

@@ -24,7 +24,7 @@
 
 ### Задание 2
 
-![Название скриншота 1](![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/2.JPG)`
+![Название скриншота 1](https://github.com/SogonovAN/DDL-DML-hw/blob/main/2.JPG)`
 
 
 ---

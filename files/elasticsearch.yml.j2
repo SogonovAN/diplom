@@ -1,0 +1,8 @@
+cluster.name: my_cluster
+node.name: "node-1"
+node.roles: [ master, data, ingest ]
+cluster.initial_master_nodes: ["node1", "node2"]
+discovery.seed_hosts: ["vm-1.ru-central1.internal", "vm-2.ru-central1.internal"]
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+network.host: 0.0.0.0

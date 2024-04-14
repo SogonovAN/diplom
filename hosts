@@ -1,0 +1,12 @@
+[ubuntu-servers]
+vm-1.ru-central1.internal
+vm-2.ru-central1.internal
+
+[zabbix-servers]
+vm-zabbix.ru-central1.internal
+
+[elasticsearch-servers]
+elasticsearch.ru-central1.internal
+
+[kibana-servers]
+kibana.ru-central1.internal

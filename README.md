@@ -29,6 +29,9 @@ sudo unzip html_demo.zip
 
 5. Запускаем ansible playbook ansible-playbook all.yml
 
+сайт доступен через http://158.160.161.78:80/
+zabbix http://158.160.110.218:8080/
+
 ```
 
 ---

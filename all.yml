@@ -133,10 +133,14 @@
   become: yes
 
   tasks:
-
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
+
+    - name: Install Java
+      apt:
+        name: default-jre
+        state: present
 
     - name: Install gnupg apt-transport-https
       apt:
@@ -155,7 +159,7 @@
 
     - name: Add Filebeat's repository
       ansible.builtin.apt_repository:
-        repo: "deb https://mirror.yandex.ru/mirrors/elastic/7/ stable main"
+        repo: "deb https://mirror.yandex.ru/mirrors/elastic/8/ stable main"
         state: present
         update_cache: yes
 
@@ -164,23 +168,31 @@
         name: elasticsearch
         state: present
 
-    - name: Configure Elasticsearch
-      template:
-        src: files/elasticsearch.yml.j2
-        dest: /etc/elasticsearch/elasticsearch.yml
-      notify: restart elasticsearch
-
   handlers:
     - name: restart elasticsearch
       service:
         name: elasticsearch
         state: restarted
 
+    - name: Configure Elasticsearch
+      template:
+        src: files/elasticsearch.yml.j2
+        dest: /etc/elasticsearch/elasticsearch.yml
+      notify: restart elasticsearch
+
 - name: Install and Configure Filebeat for Nginx logs
   hosts: [ubuntu-servers]
   become: yes
 
   tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Java
+      apt:
+        name: default-jre
+        state: present
 
     - name: Download Filebeat's apt key
       ansible.builtin.apt_key:
@@ -191,7 +203,7 @@
 
     - name: Add Filebeat's repository
       ansible.builtin.apt_repository:
-        repo: "deb https://mirror.yandex.ru/mirrors/elastic/7/ stable main"
+        repo: "deb https://mirror.yandex.ru/mirrors/elastic/8/ stable main"
         state: present
         update_cache: yes
 
@@ -229,6 +241,15 @@
   become: yes
 
   tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Java
+      apt:
+        name: default-jre
+        state: present
+
     - name: Download Kibana's apt key
       ansible.builtin.apt_key:
         url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
@@ -238,7 +259,7 @@
 
     - name: Add Kibana's repository
       ansible.builtin.apt_repository:
-        repo: "deb https://mirror.yandex.ru/mirrors/elastic/7/ stable main"
+        repo: "deb https://mirror.yandex.ru/mirrors/elastic/8/ stable main"
         state: present
         update_cache: yes
 

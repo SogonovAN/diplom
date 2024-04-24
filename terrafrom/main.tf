@@ -5,13 +5,6 @@ terraform {
     }
   }
   required_version = ">= 0.13"
-}
-
-provider "yandex" {
-  token     = 
-  cloud_id  =
-  folder_id = 
-}
 
 resource "yandex_compute_instance" "vm-1" {
 
@@ -24,11 +17,13 @@ resource "yandex_compute_instance" "vm-1" {
 
   resources {
     cores  = "2"
+    core_fraction = "20"
     memory = "2"
   }
 
   boot_disk {
     initialize_params {
+      size = 10
       image_id = "fd8nru7hnggqhs9mkqps"
     }
   }
@@ -41,7 +36,6 @@ resource "yandex_compute_instance" "vm-1" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys = 
     user-data = "${file("./meta.txt")}"
   }
 }
@@ -57,11 +51,13 @@ resource "yandex_compute_instance" "vm-2" {
 
   resources {
     cores  = "2"
+    core_fraction = "20"
     memory = "2"
   }
 
   boot_disk {
     initialize_params {
+      size = 10
       image_id = "fd8nru7hnggqhs9mkqps"
     }
   }
@@ -74,7 +70,6 @@ resource "yandex_compute_instance" "vm-2" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys = 
     user-data = "${file("./meta.txt")}"
   }
 }
@@ -90,11 +85,13 @@ resource "yandex_compute_instance" "master" {
 
   resources {
     cores  = "2"
+    core_fraction = "20"
     memory = "2"
   }
 
   boot_disk {
     initialize_params {
+      size = 10
       image_id = "fd8nru7hnggqhs9mkqps"
     }
   }
@@ -107,7 +104,6 @@ resource "yandex_compute_instance" "master" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys = 
     user-data = "${file("./meta.txt")}"
   }
 }
@@ -123,11 +119,13 @@ resource "yandex_compute_instance" "zabbix" {
 
   resources {
     cores  = "2"
+    core_fraction = "20"
     memory = "2"
   }
 
   boot_disk {
     initialize_params {
+      size = 10
       image_id = "fd8nru7hnggqhs9mkqps"
     }
   }
@@ -140,7 +138,6 @@ resource "yandex_compute_instance" "zabbix" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys = 
     user-data = "${file("./meta.txt")}"
   }
 }
@@ -156,11 +153,13 @@ resource "yandex_compute_instance" "elasticsearch-vm" {
 
   resources {
     cores  = "2"
-    memory = "2"
+    core_fraction = "20"
+    memory = "4"
   }
 
   boot_disk {
     initialize_params {
+      size = 10
       image_id = "fd8nru7hnggqhs9mkqps"
     }
   }
@@ -173,7 +172,6 @@ resource "yandex_compute_instance" "elasticsearch-vm" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys = 
     user-data = "${file("./meta.txt")}"
   }
 }
@@ -189,11 +187,13 @@ resource "yandex_compute_instance" "kibana-vm" {
 
   resources {
     cores  = "2"
+    core_fraction = "20"
     memory = "2"
   }
 
   boot_disk {
     initialize_params {
+      size = 10
       image_id = "fd8nru7hnggqhs9mkqps"
     }
   }
@@ -206,7 +206,6 @@ resource "yandex_compute_instance" "kibana-vm" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys = 
     user-data = "${file("./meta.txt")}"
   }
 }
@@ -306,7 +305,14 @@ resource "yandex_vpc_security_group" "internal-bastion-network" {
     description    = "elasticsearch"
     protocol       = "TCP"
     port           = 9200
-    v4_cidr_blocks = ["192.168.12.0/24"]
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description    = "elasticsearch"
+    protocol       = "TCP"
+    port           = 9300
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -314,6 +320,14 @@ resource "yandex_vpc_security_group" "internal-bastion-network" {
     protocol       = "TCP"
     port           = 22
     v4_cidr_blocks = ["192.168.12.0/24"]
+  }
+
+  ingress {
+    protocol          = "ANY"
+    description       = "Разрешает взаимодействие между ресурсами текущей группы безопасности"
+    predefined_target = "self_security_group"
+    from_port         = 0
+    to_port           = 65535
   }
 
   egress {

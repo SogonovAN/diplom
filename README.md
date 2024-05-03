@@ -29,9 +29,9 @@ sudo unzip html_demo.zip
 
 5. Запускаем ansible playbook ansible-playbook all.yml
 
-сайт доступен через http://158.160.158.211/
-zabbix http://158.160.97.39:8080/
-kibana http://158.160.59.176:5601/
+сайт доступен через http://158.160.163.148/
+zabbix http://178.154.203.133:8080/
+kibana http://158.160.127.8:5601/
 
 ```
 ![Название скриншота 1](https://github.com/SogonovAN/diplom/blob/main/img/kibana.JPG)`

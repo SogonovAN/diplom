@@ -168,17 +168,17 @@
         name: elasticsearch
         state: present
 
-  handlers:
-    - name: restart elasticsearch
-      service:
-        name: elasticsearch
-        state: restarted
-
     - name: Configure Elasticsearch
       template:
         src: files/elasticsearch.yml.j2
         dest: /etc/elasticsearch/elasticsearch.yml
       notify: restart elasticsearch
+
+  handlers:
+    - name: restart elasticsearch
+      service:
+        name: elasticsearch
+        state: restarted
 
 - name: Install and Configure Filebeat for Nginx logs
   hosts: [ubuntu-servers]

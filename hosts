@@ -10,3 +10,15 @@ elasticsearch.ru-central1.internal
 
 [kibana-servers]
 kibana.ru-central1.internal
+
+[ubuntu-servers:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q yak14@178.154.200.169"'
+
+[zabbix-servers:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q yak14@178.154.200.169"'
+
+[elasticsearch-servers:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q yak14@178.154.200.169"'
+
+[kibana-servers:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q yak14@178.154.200.169"'

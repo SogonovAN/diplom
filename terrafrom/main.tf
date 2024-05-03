@@ -5,6 +5,7 @@ terraform {
     }
   }
   required_version = ">= 0.13"
+}
 
 resource "yandex_compute_instance" "vm-1" {
 
@@ -30,14 +31,9 @@ resource "yandex_compute_instance" "vm-1" {
 
   network_interface {
     subnet_id = "${yandex_vpc_subnet.subnet-1.id}"
-    nat       = true
     security_group_ids = ["${yandex_vpc_security_group.internal-bastion-network.id}"]
   }
 
-  metadata = {
-    serial-port-enable = 1
-    user-data = "${file("./meta.txt")}"
-  }
 }
 
 resource "yandex_compute_instance" "vm-2" {
@@ -64,14 +60,9 @@ resource "yandex_compute_instance" "vm-2" {
 
   network_interface {
     subnet_id = "${yandex_vpc_subnet.subnet-2.id}"
-    nat       = true
     security_group_ids = ["${yandex_vpc_security_group.internal-bastion-network.id}"]
   }
 
-  metadata = {
-    serial-port-enable = 1
-    user-data = "${file("./meta.txt")}"
-  }
 }
 
 resource "yandex_compute_instance" "master" {
@@ -97,15 +88,46 @@ resource "yandex_compute_instance" "master" {
   }
 
   network_interface {
+    subnet_id = "${yandex_vpc_subnet.subnet-1.id}"
+    nat       = true
+  }
+
+  }
+}
+
+resource "yandex_compute_instance" "bastion" {
+
+  name                      = "bastion"
+  allow_stopping_for_update = true
+  platform_id               = "standard-v3"
+  zone                      = "ru-central1-a"
+  
+  hostname = "bastion"
+
+  resources {
+    cores  = "2"
+    core_fraction = "20"
+    memory = "2"
+  }
+
+  boot_disk {
+    initialize_params {
+      size = 10
+      image_id = "fd8nru7hnggqhs9mkqps"
+    }
+  }
+
+  network_interface {
     subnet_id = "${yandex_vpc_subnet.subnet-3.id}"
     nat       = true
     security_group_ids = ["${yandex_vpc_security_group.external-bastion-network.id}"]
   }
 
-  metadata = {
-    serial-port-enable = 1
-    user-data = "${file("./meta.txt")}"
+  network_interface {
+    subnet_id = "${yandex_vpc_subnet.subnet-1.id}"
+    security_group_ids = ["${yandex_vpc_security_group.internal-bastion-network.id}"]
   }
+
 }
 
 resource "yandex_compute_instance" "zabbix" {
@@ -131,15 +153,11 @@ resource "yandex_compute_instance" "zabbix" {
   }
 
   network_interface {
-    subnet_id = "${yandex_vpc_subnet.subnet-3.id}"
+    subnet_id = "${yandex_vpc_subnet.subnet-1.id}"
     nat       = true
-    security_group_ids = ["${yandex_vpc_security_group.external-bastion-network.id}"]
+    security_group_ids = ["${yandex_vpc_security_group.internal-bastion-network.id}"]
   }
 
-  metadata = {
-    serial-port-enable = 1
-    user-data = "${file("./meta.txt")}"
-  }
 }
 
 resource "yandex_compute_instance" "elasticsearch-vm" {
@@ -166,14 +184,9 @@ resource "yandex_compute_instance" "elasticsearch-vm" {
 
   network_interface {
     subnet_id = "${yandex_vpc_subnet.subnet-1.id}"
-    nat       = true
     security_group_ids = ["${yandex_vpc_security_group.internal-bastion-network.id}"]
   }
 
-  metadata = {
-    serial-port-enable = 1
-    user-data = "${file("./meta.txt")}"
-  }
 }
 
 resource "yandex_compute_instance" "kibana-vm" {
@@ -199,15 +212,11 @@ resource "yandex_compute_instance" "kibana-vm" {
   }
 
   network_interface {
-    subnet_id = "${yandex_vpc_subnet.subnet-3.id}"
+    subnet_id = "${yandex_vpc_subnet.subnet-1.id}"
     nat       = true
-    security_group_ids = ["${yandex_vpc_security_group.external-bastion-network.id}"]
+    security_group_ids = ["${yandex_vpc_security_group.internal-bastion-network.id}"]
   }
 
-  metadata = {
-    serial-port-enable = 1
-    user-data = "${file("./meta.txt")}"
-  }
 }
 
 resource "yandex_vpc_network" "network-1" {
@@ -219,6 +228,7 @@ resource "yandex_vpc_subnet" "subnet-1" {
   zone           = "ru-central1-a"
   v4_cidr_blocks = ["192.168.10.0/24"]
   network_id     = "${yandex_vpc_network.network-1.id}"
+  route_table_id = yandex_vpc_route_table.rt.id
 }
 
 resource "yandex_vpc_subnet" "subnet-2" {
@@ -226,6 +236,7 @@ resource "yandex_vpc_subnet" "subnet-2" {
   zone           = "ru-central1-b"
   v4_cidr_blocks = ["192.168.11.0/24"]
   network_id     = "${yandex_vpc_network.network-1.id}"
+  route_table_id = yandex_vpc_route_table.rt.id
 }
 
 resource "yandex_vpc_subnet" "subnet-3" {
@@ -246,6 +257,18 @@ resource "yandex_vpc_security_group" "external-bastion-network" {
     v4_cidr_blocks = ["0.0.0.0/0"]
     port           = 22
   }
+
+  egress {
+    description    = "Permit ANY"
+    protocol       = "ANY"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "yandex_vpc_security_group" "internal-bastion-network" {
+  name        = "internal-bastion-network"
+  description = "Description for security group"
+  network_id  = "${yandex_vpc_network.network-1.id}"
 
   ingress {
     protocol       = "TCP"
@@ -268,51 +291,39 @@ resource "yandex_vpc_security_group" "external-bastion-network" {
     port           = 5601
   }
 
-  egress {
-    description    = "Permit ANY"
-    protocol       = "ANY"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "yandex_vpc_security_group" "internal-bastion-network" {
-  name        = "internal-bastion-network"
-  description = "Description for security group"
-  network_id  = "${yandex_vpc_network.network-1.id}"
-
   ingress {
     description    = "Allow HTTP protocol from local subnets"
     protocol       = "TCP"
     port           = 80
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.11.0/24"]
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     description    = "Allow HTTPS protocol from local subnets"
     protocol       = "TCP"
     port           = 443
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.11.0/24"]
+    v4_cidr_blocks = ["192.168.12.0/24"]
   }
 
   ingress {
     description    = "zabbix-agent"
     protocol       = "TCP"
     port           = 10050
-    v4_cidr_blocks = ["192.168.12.0/24"]
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.11.0/24"]
   }
 
   ingress {
     description    = "elasticsearch"
     protocol       = "TCP"
     port           = 9200
-    v4_cidr_blocks = ["0.0.0.0/0"]
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.11.0/24"]
   }
 
   ingress {
     description    = "elasticsearch"
     protocol       = "TCP"
     port           = 9300
-    v4_cidr_blocks = ["0.0.0.0/0"]
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.11.0/24"]
   }
 
   ingress {
@@ -334,6 +345,21 @@ resource "yandex_vpc_security_group" "internal-bastion-network" {
     description    = "Permit ANY"
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "yandex_vpc_gateway" "default" {
+  name = "foobar"
+  shared_egress_gateway {}
+}
+
+resource "yandex_vpc_route_table" "rt" {
+  name       = "test-route-table"
+  network_id = "${yandex_vpc_network.network-1.id}"
+
+  static_route {
+    destination_prefix = "0.0.0.0/0"
+    gateway_id         = yandex_vpc_gateway.default.id
   }
 }
 

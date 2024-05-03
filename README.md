@@ -38,5 +38,8 @@ kibana http://158.160.127.8:5601/
 
 ![Название скриншота 1](https://github.com/SogonovAN/diplom/blob/main/img/zabbix.JPG)`
 
+
+![Название скриншота 1](https://github.com/SogonovAN/diplom/blob/main/img/VM.JPG)`
+
 ---
 

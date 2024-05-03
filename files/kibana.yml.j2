@@ -1,14 +1,4 @@
 server.port: 5601
 server.host: "0.0.0.0"
-elasticsearch.hosts: ["http://51.250.13.58:9200"]
-logging:
-  appenders:
-      type: file
-      fileName: /var/log/kibana/kibana.log
-      layout:
-        type: json
-  root:
-    appenders:
-      - default
-      - file
+elasticsearch.hosts: ["http://192.168.10.8:9200"]
 pid.file: /run/kibana/kibana.pid
